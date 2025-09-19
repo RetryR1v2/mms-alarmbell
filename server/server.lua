@@ -4,11 +4,31 @@ local BellsInCooldown = {}
 
 RegisterServerEvent('mms-alarmbell:server:SyncSoundToClient',function(CurrentBell)
     local src = source
-    for h,v in ipairs(GetPlayers()) do
-        TriggerClientEvent('mms-alarmbell:client:PlayBellSound',v,CurrentBell)
+    local Character = VORPcore.getUser(src).getUsedCharacter
+    local Job = Character.job
+    if CurrentBell.JoblockActive then
+        local CanUseBell = false
+        for h,v in ipairs(CurrentBell.Jobs) do
+            if v.Job == Job then
+                CanUseBell = true
+            end
+        end
+        if CanUseBell then
+            for h,v in ipairs(GetPlayers()) do
+                TriggerClientEvent('mms-alarmbell:client:PlayBellSound',v,CurrentBell)
+            end
+            local BellData = { BellCoords = CurrentBell.Coords, BellCooldown = CurrentBell.BellCooldown * 1000, BellInCooldown = true }
+            table.insert(BellsInCooldown,BellData)
+        else
+            VORPcore.NotifyRightTip(src,_U('NotTheRightJob'),5000)
+        end
+    else
+        for h,v in ipairs(GetPlayers()) do
+            TriggerClientEvent('mms-alarmbell:client:PlayBellSound',v,CurrentBell)
+        end
+        local BellData = { BellCoords = CurrentBell.Coords, BellCooldown = CurrentBell.BellCooldown * 1000, BellInCooldown = true }
+        table.insert(BellsInCooldown,BellData)
     end
-    local BellData = { BellCoords = CurrentBell.Coords, BellCooldown = CurrentBell.BellCooldown * 1000, BellInCooldown = true }
-    table.insert(BellsInCooldown,BellData)
 end)
 
 Citizen.CreateThread(function ()

@@ -23,5 +23,10 @@ Config.AlarmBells = {
         BellVolume = 0.5,
         BellRadius = 500,
         BellDuration = 25,
+        -- JobLock Settings
+        JoblockActive = false,
+        Jobs = {
+            { Job = 'Pfarrer' }
+        },
     },
 }

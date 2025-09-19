@@ -12,7 +12,7 @@
 # Changelog
 
 - 1.1.0 Initial Release Version
-
+- 1.1.1 Added Joblock
 
 # installation 
 
